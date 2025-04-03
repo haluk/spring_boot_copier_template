@@ -1,0 +1,16 @@
+artifact:
+  type: str
+  help: "Artifact name (e.g. demo)"
+  default: "demo"
+
+group_suffix:
+  type: str
+  help: "Group suffix (e.g., com)"
+  default: "com"
+
+group_name:
+  type: str
+  help: "Group name (e.g., company)"
+  default: "company"
+
+

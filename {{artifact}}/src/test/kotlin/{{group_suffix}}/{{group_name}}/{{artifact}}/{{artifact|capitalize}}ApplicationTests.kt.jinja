@@ -1,0 +1,28 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}
+
+import {{group_suffix}}.{{group_name}}.{{artifact}}.cli.{{artifact|capitalize}}CliCommand
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.ApplicationContext
+
+@SpringBootTest
+class {{artifact|capitalize}}ApplicationTests {
+
+	@Autowired
+	private lateinit var applicationContext: ApplicationContext
+
+
+	@Test
+	fun contextLoads() {
+	}
+
+	@Test
+	fun {{artifact}}CliCommandBeanExists() {
+		val bean = applicationContext.getBean({{artifact|capitalize}}CliCommand::class.java)
+		assertThat(bean).isNotNull
+		println("[DEBUG_LOG] {{artifact|capitalize}}CliCommand bean found: $bean")
+	}
+
+}

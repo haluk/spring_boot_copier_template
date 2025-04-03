@@ -1,0 +1,31 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}
+
+import {{group_suffix}}.{{group_name}}.{{artifact}}.cli.{{artifact|capitalize}}CliCommand
+import org.slf4j.LoggerFactory
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
+import picocli.CommandLine
+
+@SpringBootApplication
+class {{artifact|capitalize}}Application
+
+fun main(args: Array<String>) {
+    val logger = LoggerFactory.getLogger({{artifact|capitalize}}Application::class.java)
+
+    // Always start the Spring Boot example application
+    val context = runApplication<{{artifact|capitalize}}Application>(*args)
+
+    // If command-line arguments are provided, execute the CLI command
+    if (args.isNotEmpty()) {
+        var exitCode: Int
+        try {
+            val cliCommand = context.getBean({{artifact|capitalize}}CliCommand::class.java)
+            exitCode = CommandLine(cliCommand).execute(*args)
+        } catch (e: org.springframework.beans.factory.NoSuchBeanDefinitionException) {
+            logger.error("Error: {{artifact|capitalize}}CliCommand bean not found. Creating a new instance.")
+            val cliCommand = {{artifact|capitalize}}CliCommand()
+            exitCode = CommandLine(cliCommand).execute(*args)
+        }
+        logger.info("CLI Exit Code: $exitCode")
+    }
+}

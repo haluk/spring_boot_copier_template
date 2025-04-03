@@ -1,0 +1,28 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}.cli
+
+import org.slf4j.LoggerFactory
+import org.springframework.stereotype.Component
+import org.springframework.context.annotation.Lazy
+import org.springframework.context.annotation.Scope
+import picocli.CommandLine
+import java.util.concurrent.Callable
+
+@Component
+@Lazy
+@Scope("singleton")
+@CommandLine.Command(
+    name = "{{artifact}}-cli",
+    mixinStandardHelpOptions = true,
+    version = ["{{artifact}}-cli 0.0.1-SNAPSHOT"],
+    description = ["Performs {{artifact}} CLI operations."],
+    subcommands = [HelloWorldCommand::class]
+)
+class {{artifact|capitalize}}CliCommand : Callable<Int> {
+    private val logger = LoggerFactory.getLogger(this::class.java)
+
+    override fun call(): Int {
+        logger.info("{{artifact|capitalize}}CLICommand executed.")
+        // Add your CLI logic here
+        return 0
+    }
+}

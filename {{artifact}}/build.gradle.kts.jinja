@@ -1,0 +1,137 @@
+plugins {
+	kotlin("jvm") version "1.9.25"
+	kotlin("plugin.spring") version "1.9.25"
+	kotlin("plugin.jpa") version "1.9.25"
+	kotlin("kapt") version "1.9.25"
+	id("org.springframework.boot") version "3.4.4"
+	id("io.spring.dependency-management") version "1.1.7"
+	id("org.hibernate.orm") version "6.6.11.Final"
+	id("org.graalvm.buildtools.native") version "0.10.6"
+	id("org.asciidoctor.jvm.convert") version "3.3.2"
+}
+
+group = "{{group_suffix}}.{{group_name}}"
+version = "0.0.1-SNAPSHOT"
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom(configurations.annotationProcessor.get())
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+extra["snippetsDir"] = file("build/generated-snippets")
+extra["sentryVersion"] = "8.3.0"
+extra["springCloudVersion"] = "2024.0.1"
+extra["springModulithVersion"] = "1.3.4"
+
+val mapstructVersion = "1.6.3"
+val picocliVersion = "4.7.6"
+
+dependencies {
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("org.springframework.boot:spring-boot-starter-batch")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-data-rest")
+	implementation("org.springframework.boot:spring-boot-starter-freemarker")
+	implementation("org.springframework.boot:spring-boot-starter-mail")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("io.github.wimdeblauwe:htmx-spring-boot:4.0.1")
+	implementation("io.sentry:sentry-spring-boot-starter-jakarta")
+	implementation("org.flywaydb:flyway-core")
+	implementation("org.flywaydb:flyway-sqlserver")
+	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("org.springframework.cloud:spring-cloud-starter-config")
+	implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+	implementation("org.springframework.modulith:spring-modulith-starter-core")
+	implementation("org.springframework.modulith:spring-modulith-starter-jpa")
+	// additional
+	implementation("org.mapstruct:mapstruct:$mapstructVersion")
+	implementation("info.picocli:picocli-spring-boot-starter:$picocliVersion")
+
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
+
+	runtimeOnly("com.microsoft.sqlserver:mssql-jdbc")
+	runtimeOnly("org.springframework.modulith:spring-modulith-actuator")
+	runtimeOnly("org.springframework.modulith:spring-modulith-observability")
+
+	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+	// additional
+	annotationProcessor("info.picocli:picocli-codegen:$picocliVersion")
+
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
+	testImplementation("org.springframework.batch:spring-batch-test")
+	testImplementation("org.springframework.modulith:spring-modulith-starter-test")
+	testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+	testImplementation("org.springframework.security:spring-security-test")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	kapt("org.mapstruct:mapstruct-processor:$mapstructVersion")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom("org.springframework.modulith:spring-modulith-bom:${property("springModulithVersion")}")
+		mavenBom("io.sentry:sentry-bom:${property("sentryVersion")}")
+		mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+	}
+}
+
+kotlin {
+	compilerOptions {
+		freeCompilerArgs.addAll("-Xjsr305=strict")
+	}
+}
+
+hibernate {
+	enhancement {
+		enableAssociationManagement = true
+	}
+}
+
+allOpen {
+	annotation("jakarta.persistence.Entity")
+	annotation("jakarta.persistence.MappedSuperclass")
+	annotation("jakarta.persistence.Embeddable")
+}
+
+tasks.withType<Test> {
+	useJUnitPlatform()
+}
+
+tasks.test {
+	outputs.dir(project.extra["snippetsDir"]!!)
+}
+
+tasks.asciidoctor {
+	inputs.dir(project.extra["snippetsDir"]!!)
+	dependsOn(tasks.test)
+}
+
+tasks.bootRun {
+	// Check if 'dev' property is set
+	if (project.hasProperty("dev")) {
+		// Set Spring profile to dev
+		systemProperty("spring.profiles.active", "dev")
+		println("Running with dev profile")
+	}
+
+	args("hello", "-n", "XYZ")
+
+	// Always run this task even if it's up-to-date (equivalent to --rerun-tasks)
+	outputs.upToDateWhen { false }
+}

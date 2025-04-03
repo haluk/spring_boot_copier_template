@@ -1,0 +1,32 @@
+services:
+  sqlserver:
+    container_name: db
+    image: 'mcr.microsoft.com/mssql/server:latest'
+    hostname: mssql
+    user: root
+    environment:
+      - 'ACCEPT_EULA=yes'
+      - 'MSSQL_PID=express'
+      - 'MSSQL_SA_PASSWORD=verYs3cret'
+      - 'MSSQL_MEMORY_LIMIT_MB=8192'
+      - 'MSSQL_BACKUP_DIR=/var/opt/mssql/backup'
+    ports:
+      - '1433:1433'
+    volumes:
+      - mssql_data:/var/opt/mssql:rw
+    healthcheck:
+      test: [ "CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "$$MSSQL_SA_PASSWORD", "-Q", "SELECT 1" ]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.00'
+          memory: 8192M
+
+volumes:
+  mssql_data:
+    name: mssql_data
+    external: false

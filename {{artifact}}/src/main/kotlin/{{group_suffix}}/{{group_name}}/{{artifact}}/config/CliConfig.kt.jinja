@@ -1,0 +1,14 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}.config
+
+import {{group_suffix}}.{{group_name}}.{{artifact}}.cli.{{artifact|capitalize}}CliCommand
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+
+@Configuration
+class CliConfig {
+
+    @Bean
+    fun {{artifact}}CliCommand(): {{artifact|capitalize}}CliCommand {
+        return {{artifact|capitalize}}CliCommand()
+    }
+}
