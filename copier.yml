@@ -15,10 +15,12 @@ group_name:
 
 auth0_issuer_uri:
   type: str
-  help: "Include 'https://' and omit the trailing '/'"
+  help: "Auth0 issuer URI. Include 'https://' and omit the trailing '/'"
 
 auth0_client_id:
   type: str
+  help: "Auth0 client id"
 
 auth0_client_secret:
   type: str
+  help: "Auth0 client secret"
