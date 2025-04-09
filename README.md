@@ -48,13 +48,16 @@ copier copy https://github.com/haluk/spring-boot-kotlin-template my-new-project
 {{artifact}}
 ├── build.gradle.kts.jinja
 ├── compose.yaml
+├── docs
+│   └── requests.http
+├── flyway.conf
 ├── gradle
-│   └── wrapper
-│       ├── gradle-wrapper.jar
-│       └── gradle-wrapper.properties
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
 ├── gradlew
 ├── gradlew.bat
-├── HELP.md
+├── HELP.md.jinja
 ├── settings.gradle.kts.jinja
 └── src
     ├── main
@@ -75,14 +78,21 @@ copier copy https://github.com/haluk/spring-boot-kotlin-template my-new-project
     │   │               ├── config
     │   │               │   ├── CliConfig.kt.jinja
     │   │               │   └── security
+    │   │               │       └── SecurityConfig.kt.jinja
     │   │               ├── controller
-    │   │               │   └── HelloWorldController.kt.jinja
+    │   │               │   ├── HomeController.kt.jinja
+    │   │               │   └── rest
+    │   │               │       └── HelloWorldController.kt.jinja
     │   │               ├── domain
     │   │               │   ├── dto
+    │   │               │   │   └── ClientDto.kt.jinja
     │   │               │   ├── mapper
+    │   │               │   │   └── ClientMapper.kt.jinja
     │   │               │   ├── model
-    │   │               │   │   └── BaseTimeEntity.kt.jinja
+    │   │               │   │   ├── BaseTimeEntity.kt.jinja
+    │   │               │   │   └── Client.kt.jinja
     │   │               │   ├── repository
+    │   │               │   │   └── ClientRepository.kt.jinja
     │   │               │   └── service
     │   │               ├── exception
     │   │               │   ├── Error.kt.jinja
@@ -98,14 +108,20 @@ copier copy https://github.com/haluk/spring-boot-kotlin-template my-new-project
     │   │               │   └── util
     │   │               └── util
     │   └── resources
-    │       ├── application-dev.properties
+    │       ├── application-dev.properties.jinja
     │       ├── application-prod.properties
     │       ├── application.properties.jinja
     │       ├── db
     │       │   └── migration
+    │       │       └── V1__create_tables.sql
     │       ├── retryConfig.properties
     │       ├── static
     │       └── templates
+    │           ├── emails
+    │           ├── fragments
+    │           ├── layouts
+    │           └── pages
+    │               └── home.ftl
     └── test
         └── kotlin
             └── {{group_suffix}}
@@ -113,7 +129,7 @@ copier copy https://github.com/haluk/spring-boot-kotlin-template my-new-project
                     └── {{artifact}}
                         └── {{artifact|capitalize}}ApplicationTests.kt.jinja
 
-45 directories, 22 files
+51 directories, 32 files
 ```
 
 ## Running the Application
