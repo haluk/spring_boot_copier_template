@@ -1,0 +1,9 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}.domain.repository
+
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.model.Client
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.rest.core.annotation.RepositoryRestResource
+
+@RepositoryRestResource
+interface ClientRepository : JpaRepository<Client, Long> {
+}

@@ -1,0 +1,14 @@
+spring.security.user.name=user
+spring.security.user.password=user
+
+auth0.domain={{auth0_issuer_uri}}
+auth0.client-id=${CLIENTID:{{auth0_client_id}}}
+auth0.client-secret=${CLIENTSECRET:{{auth0_client_secret}}}
+
+spring.security.oauth2.client.registration.auth0.client-id=${auth0.client-id}
+spring.security.oauth2.client.registration.auth0.client-secret=${auth0.client-secret}
+spring.security.oauth2.client.registration.auth0.scope=openid,profile,email
+spring.security.oauth2.client.provider.auth0.issuer-uri=${auth0.domain}/
+spring.security.oauth2.resourceserver.jwt.issuer-uri=${auth0.domain}/
+
+spring.freemarker.cache=false

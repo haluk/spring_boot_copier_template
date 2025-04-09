@@ -1,0 +1,16 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}.domain.mapper
+
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.dto.ClientDto
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.model.Client
+import org.mapstruct.*
+
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
+abstract class ClientMapper {
+
+    abstract fun toEntity(clientDto: ClientDto): Client
+
+    abstract fun toDto(client: Client): ClientDto
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    abstract fun partialUpdate(clientDto: ClientDto, @MappingTarget client: Client): Client
+}

@@ -1,0 +1,49 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}.config.security
+
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.logout.LogoutHandler
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import java.io.IOException
+
+
+@Configuration
+@EnableWebSecurity
+class SecurityConfig {
+    @Value("\${auth0.domain}")
+    private val issuer: String? = null
+
+    @Value("\${auth0.client-id}")
+    private val clientId: String? = null
+
+    @Bean
+    fun filterChain(http: HttpSecurity): SecurityFilterChain {
+        http
+            .cors { }
+            .authorizeHttpRequests {
+                it.requestMatchers("/public").permitAll()
+                    .anyRequest().authenticated()
+            }
+            .oauth2ResourceServer { it.jwt { } }
+            .oauth2Login { }
+            .logout { it.addLogoutHandler(logoutHandler()) }
+
+        return http.build()
+    }
+
+    private fun logoutHandler(): LogoutHandler {
+        return LogoutHandler { _, response, _ ->
+            try {
+                val baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
+                response.sendRedirect("$issuer/v2/logout?client_id=$clientId&returnTo=$baseUrl")
+            } catch (e: IOException) {
+                throw RuntimeException(e)
+            }
+        }
+    }
+
+}

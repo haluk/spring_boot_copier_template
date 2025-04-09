@@ -1,0 +1,34 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}.controller
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.oauth2.core.oidc.user.OidcUser
+import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ResponseBody
+
+@Controller
+class HomeController {
+
+    @GetMapping("/")
+    fun home(model: Model, @AuthenticationPrincipal principal: OidcUser?): String {
+        if (principal != null) {
+            model.addAttribute("name", principal.name)
+            model.addAttribute("email", principal.email)
+            model.addAttribute("profile", principal.claims)
+        }
+        return "pages/home"
+    }
+
+    @GetMapping("/public")
+    @ResponseBody
+    fun publicEndpoint(): String {
+        return "This is a public endpoint!"
+    }
+
+    @GetMapping("/secured")
+    @ResponseBody
+    fun securedEndpoint(@AuthenticationPrincipal principal: OidcUser): String {
+        return "This is a secured endpoint! User: ${principal.name}"
+    }
+}
