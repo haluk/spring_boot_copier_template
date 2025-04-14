@@ -50,7 +50,7 @@ copier copy https://github.com/haluk/spring-boot-kotlin-template my-new-project
 ├── compose.yaml
 ├── docs
 │   └── requests.http
-├── flyway.conf
+├── flyway.conf.jinja
 ├── gradle
 │   └── wrapper
 │       ├── gradle-wrapper.jar
@@ -58,6 +58,9 @@ copier copy https://github.com/haluk/spring-boot-kotlin-template my-new-project
 ├── gradlew
 ├── gradlew.bat
 ├── HELP.md.jinja
+├── logs
+├── scripts
+│   └── get_access_token.sh.jinja
 ├── settings.gradle.kts.jinja
 └── src
     ├── main
@@ -77,28 +80,49 @@ copier copy https://github.com/haluk/spring-boot-kotlin-template my-new-project
     │   │               │       └── response
     │   │               ├── config
     │   │               │   ├── CliConfig.kt.jinja
-    │   │               │   └── security
-    │   │               │       └── SecurityConfig.kt.jinja
+    │   │               │   ├── pagination
+    │   │               │   │   ├── ClippedPageableResolver.kt.jinja
+    │   │               │   │   └── PaginationProperties.kt.jinja
+    │   │               │   ├── RequestIdFilter.kt.jinja
+    │   │               │   ├── security
+    │   │               │   │   └── SecurityConfig.kt.jinja
+    │   │               │   └── WebConfig.kt.jinja
     │   │               ├── controller
     │   │               │   ├── HomeController.kt.jinja
     │   │               │   └── rest
+    │   │               │       ├── ClientController.kt.jinja
     │   │               │       └── HelloWorldController.kt.jinja
     │   │               ├── domain
     │   │               │   ├── dto
-    │   │               │   │   └── ClientDto.kt.jinja
+    │   │               │   │   ├── ClientDto.kt.jinja
+    │   │               │   │   ├── request
+    │   │               │   │   ├── response
+    │   │               │   │   │   ├── ErrorResponse.kt.jinja
+    │   │               │   │   │   └── PaginatedResponse.kt.jinja
+    │   │               │   │   └── SiteDto.kt.jinja
     │   │               │   ├── mapper
-    │   │               │   │   └── ClientMapper.kt.jinja
+    │   │               │   │   ├── ClientMapper.kt.jinja
+    │   │               │   │   └── SiteMapper.kt.jinja
     │   │               │   ├── model
     │   │               │   │   ├── BaseTimeEntity.kt.jinja
-    │   │               │   │   └── Client.kt.jinja
+    │   │               │   │   ├── Client.kt.jinja
+    │   │               │   │   └── Site.kt.jinja
     │   │               │   ├── repository
-    │   │               │   │   └── ClientRepository.kt.jinja
+    │   │               │   │   ├── ClientRepository.kt.jinja
+    │   │               │   │   └── SiteRepository.kt.jinja
     │   │               │   └── service
+    │   │               │       ├── ClientService.kt.jinja
+    │   │               │       └── impl
+    │   │               │           └── ClientServiceImpl.kt.jinja
     │   │               ├── exception
+    │   │               │   ├── EntityNotFoundException.kt.jinja
     │   │               │   ├── Error.kt.jinja
     │   │               │   └── ResourceNotFoundException.kt.jinja
     │   │               ├── exceptionHandler
-    │   │               │   └── GlobalErrorHandler.kt.jinja
+    │   │               │   ├── GlobalErrorHandler.kt.jinja
+    │   │               │   └── GlobalExceptionHandler.kt.jinja
+    │   │               ├── logging
+    │   │               │   └── ControllerLoggingAspect.kt.jinja
     │   │               ├── security
     │   │               │   ├── auth
     │   │               │   ├── authorization
@@ -107,6 +131,7 @@ copier copy https://github.com/haluk/spring-boot-kotlin-template my-new-project
     │   │               │   ├── user
     │   │               │   └── util
     │   │               └── util
+    │   │                   └── PaginationUtils.kt.jinja
     │   └── resources
     │       ├── application-dev.properties.jinja
     │       ├── application-prod.properties
@@ -114,6 +139,7 @@ copier copy https://github.com/haluk/spring-boot-kotlin-template my-new-project
     │       ├── db
     │       │   └── migration
     │       │       └── V1__create_tables.sql
+    │       ├── logback-spring.xml
     │       ├── retryConfig.properties
     │       ├── static
     │       └── templates
@@ -129,7 +155,7 @@ copier copy https://github.com/haluk/spring-boot-kotlin-template my-new-project
                     └── {{artifact}}
                         └── {{artifact|capitalize}}ApplicationTests.kt.jinja
 
-51 directories, 32 files
+58 directories, 51 files
 ```
 
 ## Running the Application
