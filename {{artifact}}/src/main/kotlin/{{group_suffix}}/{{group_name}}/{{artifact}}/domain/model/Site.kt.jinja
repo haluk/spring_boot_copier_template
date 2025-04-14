@@ -1,0 +1,24 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}.domain.model
+
+import jakarta.persistence.*
+
+@Entity
+@Table(name = "Site")
+class Site(
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SiteGen")
+    @SequenceGenerator(name = "SiteGen", sequenceName = "SiteSeq")
+    @Column(name = "Id", nullable = false)
+    open var id: Long? = null,
+
+    @Column(name = "Name", nullable = false)
+    val name: String,
+
+    @Column(name = "PropertyId", nullable = false)
+    val propertyId: String,
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ClientId", nullable = false)
+    open var client: Client
+) : BaseTimeEntity() {
+}

@@ -1,16 +1,18 @@
 package {{group_suffix}}.{{group_name}}.{{artifact}}.cli
 
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import picocli.CommandLine
 
 @Component
 @CommandLine.Command(name = "hello", description = ["Prints Hello, World!"])
 class HelloWorldCommand : Runnable {
+    private val logger = LoggerFactory.getLogger(this::class.java)
 
     @CommandLine.Option(names = ["-n", "--name"], description = ["Name to greet"], required = true)
     lateinit var name: String
 
     override fun run() {
-        println("Hello, $name from CLI!")
+        logger.info("Hello, $name from CLI!")
     }
 }

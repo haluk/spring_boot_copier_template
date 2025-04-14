@@ -1,0 +1,47 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}.util
+
+import {{group_suffix}}.{{group_name}}.{{artifact}}.config.RequestIdFilter
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.dto.response.PaginatedResponse
+import jakarta.servlet.http.HttpServletRequest
+import org.slf4j.MDC
+import org.springframework.data.domain.Page
+
+object PaginationUtils {
+
+    fun <R> buildResponse(
+        page: Page<R>,
+        request: HttpServletRequest
+    ): PaginatedResponse<R> {
+        val baseUrl = request.requestURL.toString()
+
+        // Filter out repeated "page" and "size", keep only other query params
+        val queryParams = request.parameterMap
+            .filterKeys { it != "page" && it != "size" && it != "continue" }
+            .flatMap { (key, values) -> values.map { "$key=$it" } }
+            .joinToString("&")
+            .let { if (it.isNotEmpty()) "&$it" else "" }
+
+        val pageParam = "page"
+        val sizeParam = "size"
+        val currentPage = page.number
+        val size = page.size
+
+        val next = if (page.hasNext()) "$baseUrl?$pageParam=${currentPage + 1}&$sizeParam=$size$queryParams" else null
+        val prev =
+            if (page.hasPrevious()) "$baseUrl?$pageParam=${currentPage - 1}&$sizeParam=$size$queryParams" else null
+
+        val requestId = MDC.get(RequestIdFilter.REQUEST_ID_HEADER)
+
+        return PaginatedResponse(
+            requestId = requestId,
+            content = page.content,
+            page = currentPage,
+            size = size,
+            totalElements = page.totalElements,
+            totalPages = page.totalPages,
+            next = next,
+            prev = prev
+        )
+    }
+}
+

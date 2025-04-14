@@ -3,6 +3,7 @@ package {{group_suffix}}.{{group_name}}.{{artifact}}.domain.model
 import jakarta.persistence.*
 
 @Entity
+@Table(name = "Client")
 class Client(
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ClientGen")
@@ -13,7 +14,10 @@ class Client(
     @Column(name = "Name", nullable = false)
     val name: String,
 
-    @Column(name = "CompanyId", nullable = false)
-    val companyId: String,
+    @Column(name = "CompanyId", nullable = false, unique = true)
+    val companyId: String? = null,
+
+    @Column(name = "Description", nullable = true)
+    val description: String? = null,
 ) : BaseTimeEntity() {
 }

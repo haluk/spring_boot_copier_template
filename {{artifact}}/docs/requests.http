@@ -5,3 +5,17 @@ Authorization: Bearer addtokenhere
 ### Clients
 GET http://localhost:8080/api/clients
 Authorization: Bearer addtokenhere
+
+###
+POST http://localhost:8080/api/clients
+Content-Type: application/json
+Authorization: Bearer addtokenhere
+
+{
+  "name": "ACME",
+  "companyId": "CoolId"
+}
+
+### Sites
+GET http://localhost:8080/api/sites
+Authorization: Bearer addtokenhere

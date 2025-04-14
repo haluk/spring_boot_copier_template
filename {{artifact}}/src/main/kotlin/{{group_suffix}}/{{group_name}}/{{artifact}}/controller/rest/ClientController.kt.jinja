@@ -1,0 +1,41 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}.controller.rest
+
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.dto.ClientDto
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.dto.response.PaginatedResponse
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.service.ClientService
+import {{group_suffix}}.{{group_name}}.{{artifact}}.util.PaginationUtils
+import jakarta.servlet.http.HttpServletRequest
+import org.springframework.data.domain.Pageable
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.*
+
+@RestController
+@RequestMapping("/api/clients")
+class ClientController(
+    private val clientService: ClientService
+) {
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    fun create(@RequestBody dto: ClientDto): ClientDto =
+        clientService.create(dto)
+
+    @GetMapping("/{id}")
+    fun findById(@PathVariable id: Long): ClientDto =
+        clientService.findById(id)
+
+    @PutMapping("/{id}")
+    fun update(@PathVariable id: Long, @RequestBody dto: ClientDto): ClientDto =
+        clientService.update(id, dto)
+
+    @GetMapping
+    fun findAll(
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "100") size: Int,
+        pageable: Pageable,
+        request: HttpServletRequest
+    ): PaginatedResponse<ClientDto> {
+        return PaginationUtils.buildResponse(clientService.findAll(pageable), request)
+    }
+
+}

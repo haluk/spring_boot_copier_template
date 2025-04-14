@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+curl --request POST \
+  --url {{auth0_issuer_uri}}/oauth/token \
+  --header 'content-type: application/json' \
+  --data '{"client_id":"{{auth0_client_id}}","client_secret":"{{auth0_client_secret}}","audience":"{{auth0_issuer_uri}}/api/v2/","grant_type":"client_credentials"}' |
+  jq -r '.access_token'

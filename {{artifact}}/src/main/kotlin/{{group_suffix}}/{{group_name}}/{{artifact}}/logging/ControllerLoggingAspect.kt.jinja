@@ -1,0 +1,40 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}.logging
+
+import org.aspectj.lang.JoinPoint
+import org.aspectj.lang.annotation.*
+import org.slf4j.LoggerFactory
+import org.slf4j.MDC
+import org.springframework.stereotype.Component
+
+@Aspect
+@Component
+class ControllerLoggingAspect {
+
+    private val logger = LoggerFactory.getLogger(this::class.java)
+
+    @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
+    fun restControllerMethods() {
+    }
+
+    @Before("restControllerMethods()")
+    fun logBefore(joinPoint: JoinPoint) {
+        val requestId = MDC.get(RequestIdFilter.REQUEST_ID_HEADER)
+        val method = joinPoint.signature.toShortString()
+        val args = joinPoint.args.joinToString(", ")
+        logger.info("[{}] → Entering method {} with args: {}", requestId, method, args)
+    }
+
+    @AfterReturning(pointcut = "restControllerMethods()", returning = "result")
+    fun logAfter(joinPoint: JoinPoint, result: Any?) {
+        val requestId = MDC.get(RequestIdFilter.REQUEST_ID_HEADER)
+        val method = joinPoint.signature.toShortString()
+        logger.info("[{}] ← Exiting method {} with result: {}", requestId, method, result)
+    }
+
+    @AfterThrowing(pointcut = "restControllerMethods()", throwing = "ex")
+    fun logException(joinPoint: JoinPoint, ex: Throwable) {
+        val requestId = MDC.get(RequestIdFilter.REQUEST_ID_HEADER)
+        val method = joinPoint.signature.toShortString()
+        logger.error("[{}] !! Exception in method {}: {}", requestId, method, ex.message, ex)
+    }
+}

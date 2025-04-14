@@ -1,0 +1,6 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}.exception
+
+class EntityNotFoundException(
+    entity: String,
+    id: Any
+) : RuntimeException("$entity with id [$id] not found")

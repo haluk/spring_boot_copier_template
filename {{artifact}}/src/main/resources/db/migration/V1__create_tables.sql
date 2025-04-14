@@ -1,15 +1,42 @@
-CREATE SEQUENCE dbo.Client_Id_Seq
+CREATE SEQUENCE dbo.ClientSeq
     START WITH 1
     INCREMENT BY 50;
 GO
 
 CREATE TABLE dbo.Client
 (
-    Id         BIGINT         NOT NULL,
-    CreatedAt  DATETIME       NOT NULL,
-    UpdatedAt  DATETIME       NOT NULL,
-    Name       VARCHAR(255)   NOT NULL,
-    CompanyId  VARCHAR(255)   NOT NULL,
+    Id          BIGINT       NOT NULL,
+    CreatedAt   DATETIME     NOT NULL,
+    UpdatedAt   DATETIME     NOT NULL,
+    Name        VARCHAR(255) NOT NULL,
+    CompanyId   VARCHAR(255),
+    Description VARCHAR(255),
     CONSTRAINT PK_Client PRIMARY KEY (Id)
 );
+GO
+
+CREATE SEQUENCE dbo.SiteSeq
+    START WITH 1
+    INCREMENT BY 50;
+GO
+
+CREATE TABLE Site
+(
+    Id         BIGINT       NOT NULL,
+    CreatedAt  DATETIME     NOT NULL,
+    UpdatedAt  DATETIME     NOT NULL,
+    Name       VARCHAR(255) NOT NULL,
+    PropertyId VARCHAR(255) NOT NULL,
+    ClientId   BIGINT       NOT NULL,
+    CONSTRAINT Pk_Site PRIMARY KEY (Id)
+)
+GO
+
+ALTER TABLE Client
+    ADD CONSTRAINT UC_CLIENT_COMPANYID UNIQUE (CompanyId)
+GO
+
+
+ALTER TABLE Site
+    ADD CONSTRAINT FK_SITE_ON_CLIENTID FOREIGN KEY (ClientId) REFERENCES client (Id)
 GO

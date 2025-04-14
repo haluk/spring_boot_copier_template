@@ -1,0 +1,12 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}.domain.dto.response
+
+data class PaginatedResponse<T>(
+    val requestId: String?,
+    val content: List<T>,
+    val page: Int,
+    val size: Int,
+    val totalElements: Long,
+    val totalPages: Int,
+    val next: String?,
+    val prev: String?
+)

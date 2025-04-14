@@ -2,11 +2,10 @@ package {{group_suffix}}.{{group_name}}.{{artifact}}.domain.dto
 
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotEmpty
-import jakarta.validation.constraints.NotNull
 import java.io.Serializable
 
 data class ClientDto(
-    @field:NotNull val id: Long? = null,
-    @field:NotNull @field:NotEmpty @field:NotBlank val name: String? = null,
-    @field:NotNull @field:NotEmpty @field:NotBlank val companyId: String? = null
+    var name: String? = null,
+    @field:NotEmpty @field:NotBlank var companyId: String? = null,
+    @field:NotEmpty @field:NotBlank var description: String? = null
 ) : Serializable
