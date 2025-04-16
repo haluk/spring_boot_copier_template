@@ -1,0 +1,40 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}.domain.service
+
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.dto.SiteDto
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.dto.request.SiteCreateDto
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.mapper.SiteMapper
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.model.Site
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.repository.ClientRepository
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.repository.SiteRepository
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.service.impl.CrudServiceImpl
+import {{group_suffix}}.{{group_name}}.{{artifact}}.exception.EntityNotFoundException
+import org.springframework.stereotype.Service
+
+@Service
+class SiteService(
+    repository: SiteRepository,
+    mapper: SiteMapper,
+    private val clientRepository: ClientRepository
+) : CrudServiceImpl<Site, SiteDto, Long>(repository, mapper) {
+
+    private val siteRepository = repository
+    private val siteMapper = mapper
+
+    fun findByClientId(clientId: Long): List<SiteDto> {
+        val sites = siteRepository.findByClientId(clientId)
+        return sites.map(siteMapper::toDto)
+    }
+
+    fun createWithClientId(dto: SiteCreateDto): SiteDto {
+        val client =
+            clientRepository.findById(dto.clientId).orElseThrow { EntityNotFoundException("Client", dto.clientId) }
+
+        val site = Site(
+            name = dto.name,
+            propertyId = dto.propertyId,
+            client = client
+        )
+
+        return siteMapper.toDto(siteRepository.save(site))
+    }
+}

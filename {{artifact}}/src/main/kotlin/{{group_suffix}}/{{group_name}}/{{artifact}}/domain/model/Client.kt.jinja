@@ -12,12 +12,11 @@ class Client(
     open var id: Long? = null,
 
     @Column(name = "Name", nullable = false)
-    val name: String,
+    var name: String,
 
     @Column(name = "CompanyId", nullable = false, unique = true)
-    val companyId: String? = null,
+    var companyId: String? = null,
 
     @Column(name = "Description", nullable = true)
-    val description: String? = null,
-) : BaseTimeEntity() {
-}
+    var description: String? = null,
+) : BaseTimeEntity()

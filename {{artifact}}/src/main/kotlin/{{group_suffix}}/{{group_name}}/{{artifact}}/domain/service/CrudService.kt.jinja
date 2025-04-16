@@ -1,0 +1,11 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}.domain.service
+
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+
+interface CrudService<E, D, ID> {
+    fun create(dto: D): D
+    fun findById(id: ID): D
+    fun update(id: ID, dto: D): D
+    fun findAll(pageable: Pageable): Page<D>
+}

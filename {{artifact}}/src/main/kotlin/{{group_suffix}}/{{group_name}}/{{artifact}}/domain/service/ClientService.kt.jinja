@@ -1,12 +1,14 @@
 package {{group_suffix}}.{{group_name}}.{{artifact}}.domain.service
 
 import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.dto.ClientDto
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.mapper.ClientMapper
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.model.Client
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.repository.ClientRepository
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.service.impl.CrudServiceImpl
+import org.springframework.stereotype.Service
 
-interface ClientService {
-    fun create(dto: ClientDto): ClientDto
-    fun findById(id: Long): ClientDto
-    fun update(id: Long, dto: ClientDto): ClientDto
-    fun findAll(pageable: Pageable): Page<ClientDto>
-}
+@Service
+class ClientService(
+    repository: ClientRepository,
+    mapper: ClientMapper
+) : CrudServiceImpl<Client, ClientDto, Long>(repository, mapper)

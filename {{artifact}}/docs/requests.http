@@ -1,15 +1,15 @@
 ### Hello
-GET http://localhost:8080/api/hello?name=XYZ
-Authorization: Bearer addtokenhere
+GET {{root}}/api/hello?name=XYZ
+Authorization: Bearer {{mytoken}}
 
 ### Clients
-GET http://localhost:8080/api/clients
-Authorization: Bearer addtokenhere
+GET {{root}}/api/clients
+Authorization: Bearer {{mytoken}}
 
 ###
-POST http://localhost:8080/api/clients
+POST {{root}}/api/clients
 Content-Type: application/json
-Authorization: Bearer addtokenhere
+Authorization: Bearer {{mytoken}}
 
 {
   "name": "ACME",
@@ -17,5 +17,24 @@ Authorization: Bearer addtokenhere
 }
 
 ### Sites
-GET http://localhost:8080/api/sites
-Authorization: Bearer addtokenhere
+GET {{root}}/api/sites
+Authorization: Bearer {{mytoken}}
+
+###
+GET {{root}}/api/sites/1
+Authorization: Bearer {{mytoken}}
+
+###
+GET {{root}}/api/sites/by-client/1
+Authorization: Bearer {{mytoken}}
+
+###
+POST {{root}}/api/sites/with-client-id
+Content-Type: application/json
+Authorization: Bearer {{mytoken}}
+
+{
+  "name": "Cool Site",
+  "propertyId": "CoolPropertyId",
+  "clientId": 1
+}

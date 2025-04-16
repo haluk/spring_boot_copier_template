@@ -1,7 +1,22 @@
 package {{group_suffix}}.{{group_name}}.{{artifact}}.domain.repository
 
 import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.model.Site
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
+import java.util.*
 
 interface SiteRepository : JpaRepository<Site, Long> {
+    @Query(
+        "SELECT s FROM Site s INNER JOIN FETCH s.client",
+        countQuery = "SELECT count(s) FROM Site s"
+    )
+    override fun findAll(pageable: Pageable): Page<Site>
+
+    @Query("SELECT s FROM Site s INNER JOIN FETCH s.client WHERE s.id = :id")
+    override fun findById(id: Long): Optional<Site>
+
+    @Query("SELECT s FROM Site s INNER JOIN FETCH s.client WHERE s.client.id = :clientId")
+    fun findByClientId(clientId: Long): List<Site>
 }

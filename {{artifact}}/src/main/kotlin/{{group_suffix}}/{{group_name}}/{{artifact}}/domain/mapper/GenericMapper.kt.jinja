@@ -1,0 +1,7 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}.domain.mapper
+
+interface GenericMapper<E, D> {
+    fun toDto(entity: E): D
+    fun toEntity(dto: D): E
+    fun partialUpdate(dto: D, entity: E)
+}

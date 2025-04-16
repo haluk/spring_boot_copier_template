@@ -1,0 +1,11 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}.domain.dto.request
+
+import jakarta.validation.constraints.NotBlank
+import jakarta.validation.constraints.NotNull
+
+data class SiteCreateDto(
+    @field:NotBlank val name: String,
+    @field:NotBlank val propertyId: String,
+    @field:NotNull val clientId: Long
+)
+

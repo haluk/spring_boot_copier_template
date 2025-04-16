@@ -1,0 +1,28 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}.controller.rest
+
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.dto.SiteDto
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.dto.request.SiteCreateDto
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.model.Site
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.service.CrudService
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.service.SiteService
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.*
+
+@RestController
+@RequestMapping("/api/sites")
+class SiteController(
+    override val service: CrudService<Site, SiteDto, Long>
+) : CrudController<Site, SiteDto, Long>() {
+
+    private val siteService by lazy { service as SiteService }
+
+    @GetMapping("/by-client/{clientId}")
+    fun findByClientId(@PathVariable clientId: Long): List<SiteDto> {
+        return siteService.findByClientId(clientId)
+    }
+
+    @PostMapping("/with-client-id")
+    @ResponseStatus(HttpStatus.CREATED)
+    fun createWithClientId(@RequestBody dto: SiteCreateDto): SiteDto =
+        siteService.createWithClientId(dto)
+}

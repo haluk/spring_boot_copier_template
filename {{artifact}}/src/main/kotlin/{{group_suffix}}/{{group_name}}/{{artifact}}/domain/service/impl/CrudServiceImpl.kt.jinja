@@ -1,0 +1,47 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}.domain.service.impl
+
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.mapper.GenericMapper
+import {{group_suffix}}.{{group_name}}.{{artifact}}.domain.service.CrudService
+import {{group_suffix}}.{{group_name}}.{{artifact}}.exception.EntityNotFoundException
+import jakarta.transaction.Transactional
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.repository.findByIdOrNull
+import java.lang.reflect.ParameterizedType
+
+@Transactional
+abstract class CrudServiceImpl<E : Any, D, ID>(
+    private val repository: JpaRepository<E, ID>,
+    private val mapper: GenericMapper<E, D>
+) : CrudService<E, D, ID> {
+
+    override fun create(dto: D): D {
+        val entity = mapper.toEntity(dto)
+        return mapper.toDto(repository.save(entity))
+    }
+
+    override fun findById(id: ID): D {
+        val entity = repository.findByIdOrNull(id)
+            ?: throw EntityNotFoundException(getEntityName(), id.toString())
+        return mapper.toDto(entity)
+    }
+
+    override fun update(id: ID, dto: D): D {
+        val entity = repository.findByIdOrNull(id)
+            ?: throw EntityNotFoundException(getEntityName(), id.toString())
+        mapper.partialUpdate(dto, entity)
+        return mapper.toDto(repository.save(entity))
+    }
+
+    override fun findAll(pageable: Pageable): Page<D> {
+        return repository.findAll(pageable).map(mapper::toDto)
+    }
+
+    protected open fun getEntityName(): String {
+        val genericClass = this::class.java.genericSuperclass as ParameterizedType
+        val entityClass = genericClass.actualTypeArguments[0] as Class<*>
+
+        return entityClass.simpleName
+    }
+}

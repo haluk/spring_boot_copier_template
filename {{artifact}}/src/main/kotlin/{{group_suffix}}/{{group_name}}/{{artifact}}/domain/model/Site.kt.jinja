@@ -20,5 +20,4 @@ class Site(
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "ClientId", nullable = false)
     open var client: Client
-) : BaseTimeEntity() {
-}
+) : BaseTimeEntity()
