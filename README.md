@@ -49,6 +49,7 @@ copier copy https://github.com/haluk/spring-boot-kotlin-template my-new-project
 ├── build.gradle.kts.jinja
 ├── compose.yaml
 ├── docs
+│   ├── http-client.env.json
 │   └── requests.http
 ├── flyway.conf.jinja
 ├── gradle
@@ -91,17 +92,21 @@ copier copy https://github.com/haluk/spring-boot-kotlin-template my-new-project
     │   │               │   ├── HomeController.kt.jinja
     │   │               │   └── rest
     │   │               │       ├── ClientController.kt.jinja
-    │   │               │       └── HelloWorldController.kt.jinja
+    │   │               │       ├── CrudController.kt.jinja
+    │   │               │       ├── HelloWorldController.kt.jinja
+    │   │               │       └── SiteController.kt.jinja
     │   │               ├── domain
     │   │               │   ├── dto
     │   │               │   │   ├── ClientDto.kt.jinja
     │   │               │   │   ├── request
+    │   │               │   │   │   └── SiteCreateDto.kt.jinja
     │   │               │   │   ├── response
     │   │               │   │   │   ├── ErrorResponse.kt.jinja
     │   │               │   │   │   └── PaginatedResponse.kt.jinja
     │   │               │   │   └── SiteDto.kt.jinja
     │   │               │   ├── mapper
     │   │               │   │   ├── ClientMapper.kt.jinja
+    │   │               │   │   ├── GenericMapper.kt.jinja
     │   │               │   │   └── SiteMapper.kt.jinja
     │   │               │   ├── model
     │   │               │   │   ├── BaseTimeEntity.kt.jinja
@@ -112,8 +117,10 @@ copier copy https://github.com/haluk/spring-boot-kotlin-template my-new-project
     │   │               │   │   └── SiteRepository.kt.jinja
     │   │               │   └── service
     │   │               │       ├── ClientService.kt.jinja
-    │   │               │       └── impl
-    │   │               │           └── ClientServiceImpl.kt.jinja
+    │   │               │       ├── CrudService.kt.jinja
+    │   │               │       ├── impl
+    │   │               │       │   └── CrudServiceImpl.kt.jinja
+    │   │               │       └── SiteService.kt.jinja
     │   │               ├── exception
     │   │               │   ├── EntityNotFoundException.kt.jinja
     │   │               │   ├── Error.kt.jinja
@@ -122,7 +129,8 @@ copier copy https://github.com/haluk/spring-boot-kotlin-template my-new-project
     │   │               │   ├── GlobalErrorHandler.kt.jinja
     │   │               │   └── GlobalExceptionHandler.kt.jinja
     │   │               ├── logging
-    │   │               │   └── ControllerLoggingAspect.kt.jinja
+    │   │               │   ├── ControllerLoggingAspect.kt.jinja
+    │   │               │   └── DatabaseConnectionLogging.kt.jinja
     │   │               ├── security
     │   │               │   ├── auth
     │   │               │   ├── authorization
@@ -155,7 +163,7 @@ copier copy https://github.com/haluk/spring-boot-kotlin-template my-new-project
                     └── {{artifact}}
                         └── {{artifact|capitalize}}ApplicationTests.kt.jinja
 
-58 directories, 51 files
+58 directories, 59 files
 ```
 
 ## Running the Application

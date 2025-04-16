@@ -38,3 +38,15 @@ Authorization: Bearer {{mytoken}}
   "propertyId": "CoolPropertyId",
   "clientId": 1
 }
+
+###
+# non existing client
+POST {{root}}/api/sites/with-client-id
+Content-Type: application/json
+Authorization: Bearer {{mytoken}}
+
+{
+  "name": "Cool Site",
+  "propertyId": "CoolPropertyId2",
+  "clientId": 2
+}

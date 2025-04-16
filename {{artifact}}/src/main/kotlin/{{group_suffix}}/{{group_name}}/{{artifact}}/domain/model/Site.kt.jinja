@@ -3,7 +3,10 @@ package {{group_suffix}}.{{group_name}}.{{artifact}}.domain.model
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "Site")
+@Table(
+    name = "Site",
+    uniqueConstraints = [UniqueConstraint(columnNames = ["PropertyId", "ClientId"])]
+)
 class Site(
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SiteGen")

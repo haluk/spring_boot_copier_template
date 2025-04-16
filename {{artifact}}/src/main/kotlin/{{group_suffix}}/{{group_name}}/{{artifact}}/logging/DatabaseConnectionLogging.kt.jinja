@@ -1,0 +1,39 @@
+package {{group_suffix}}.{{group_name}}.{{artifact}}.logging
+
+import org.slf4j.LoggerFactory
+import org.springframework.boot.ApplicationArguments
+import org.springframework.boot.ApplicationRunner
+import org.springframework.stereotype.Component
+import javax.sql.DataSource
+
+@Component
+class DatabaseConnectionLogger(
+    private val dataSource: DataSource
+) : ApplicationRunner {
+
+    private val logger = LoggerFactory.getLogger(this::class.java)
+
+    override fun run(args: ApplicationArguments) {
+        try {
+            dataSource.connection.use { connection ->
+                val metadata = connection.metaData
+                logger.info("Connected to database:")
+                logger.info("URL: {}", metadata.url)
+                logger.info("Database Name: {}", connection.catalog)
+                logger.info("Database Product: {} {}", metadata.databaseProductName, metadata.databaseProductVersion)
+                logger.info("Schema: {}", connection.schema)
+                logger.info("Username: {}", metadata.userName)
+
+                // Check if tables exist
+                val tables = mutableListOf<String>()
+                val rs = metadata.getTables(connection.catalog, connection.schema, "%", arrayOf("TABLE"))
+                while (rs.next()) {
+                    tables.add(rs.getString("TABLE_NAME"))
+                }
+                logger.info("Tables found: {}", tables)
+            }
+        } catch (e: Exception) {
+            logger.error("Failed to get database connection details", e)
+        }
+    }
+}
